@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анна Коваль | Nail Studio</title>
+    <style>
+        :root {
+            --bg: #fff9f5;
+            --card: #ffffff;
+            --text: #3d2c2c;
+            --text-light: #6b5b5b;
+            --accent: #d4a08c;
+            --accent-dark: #c08a7a;
+            --gold: #c9a96e;
+            --border: #f0e0d6;
+            --shadow: 0 8px 30px rgba(0,0,0,0.04);
+            --shadow-hover: 0 16px 40px rgba(0,0,0,0.08);
+            --radius: 20px;
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ─── Анімації появи при скролі ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ─── Навігація ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255,249,245,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.7rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+        nav.scrolled {
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--accent-dark);
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        .nav-links a:hover {
+            color: var(--accent-dark);
+        }
+        .lang-btn {
+            background: var(--card);
+            border: 1.5px solid var(--accent);
+            color: var(--accent-dark);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+        }
+        .lang-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        /* ─── Загальні секції ─── */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+            letter-spacing: -0.5px;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 3.5rem;
+            font-size: 1.1rem;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .accent-text {
+            color: var(--accent-dark);
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            min-height: 90vh;
+            padding-top: 6rem;
+        }
+        .hero-content {
+            flex: 1;
+        }
+        .hero-content .badge {
+            display: inline-block;
+            background: #fdf2ec;
+            color: var(--accent-dark);
+            padding: 0.5rem 1.3rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .hero-content h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.2rem;
+            letter-spacing: -1px;
+        }
+        .hero-content p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 480px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(212,160,140,0.35);
+        }
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212,160,140,0.45);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--accent-dark);
+            border: 2px solid var(--accent);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+        .btn-outline:hover {
+            background: #fdf2ec;
+            transform: translateY(-2px);
+        }
+        .hero-image {
+            flex: 1;
+            position: relative;
+        }
+        /* ═══════════════════════════════════════════ */
+        /* ФОТО: Головне фото Анни або її роботи     */
+        /* Заміни src на своє зображення 600x600px   */
+        /* ═══════════════════════════════════════════ */
+        .hero-image img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 50%;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+            border: 6px solid #fff;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px dashed var(--accent);
+            opacity: 0.4;
+            animation: rotate 25s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ─── ПЕРЕВАГИ ─── */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+        .benefit-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .benefit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+        .benefit-card .icon {
+            font-size: 2.8rem;
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+        .benefit-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.7rem;
+        }
+        .benefit-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* ─── ПОСЛУГИ ─── */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .service-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        /* ═══════════════════════════════════════════ */
+        /* ФОТО: Картинка послуги 400x250px          */
+        /* 1 – естетичний манікюр                    */
+        /* ═══════════════════════════════════════════ */
+        .service-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #fdf2ec;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 3rem;
+        }
+        .service-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .service-info {
+            padding: 1.5rem;
+        }
+        .service-info h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .service-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ─── ПРО МАЙСТРА ─── */
+        .about-section {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .about-text {
+            flex: 1.2;
+        }
+        .about-text p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        .about-image {
+            flex: 0.8;
+            position: relative;
+        }
+        /* ═══════════════════════════════════════════ */
+        /* ФОТО: Фото Анни (портрет) 400x500px       */
+        /* ═══════════════════════════════════════════ */
+        .about-image img {
+            width: 100%;
+            max-width: 380px;
+            border-radius: var(--radius);
+            object-fit: cover;
+            aspect-ratio: 4/5;
+            box-shadow: var(--shadow-hover);
+            border: 4px solid #fff;
+        }
+        .about-image::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--radius);
+            border: 2px solid var(--accent);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* ─── КОНТАКТИ ─── */
+        .contact-wrapper {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        .contact-info {
+            flex: 1;
+        }
+        .contact-info .info-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        .contact-info .info-icon {
+            font-size: 1.5rem;
+        }
+        .contact-form {
+            flex: 1;
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .contact-form input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            margin-bottom: 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            background: #fefcf9;
+        }
+        .contact-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .contact-form .btn-primary {
+            width: 100%;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ─── Toast сповіщення ─── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #3d2c2c;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s;
+            pointer-events: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── Мобільна адаптація ─── */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding-top: 5rem;
+            }
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            .hero-content p {
+                max-width: 100%;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .hero-image img {
+                max-width: 280px;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--bg);
+                padding: 1.5rem;
+                border-bottom: 1px solid var(--border);
+                box-shadow: var(--shadow);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .section-title {
+                font-size: 1.9rem;
+            }
+            .about-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .about-image img {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════ НАВІГАЦІЯ ═══════════════ -->
+    <nav id="navbar">
+        <div class="logo">✨ Анна Коваль</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero" class="active" data-lang-uk="Головна" data-lang-en="Home">Головна</a></li>
+            <li><a href="#benefits" data-lang-uk="Переваги" data-lang-en="Benefits">Переваги</a></li>
+            <li><a href="#services" data-lang-uk="Послуги" data-lang-en="Services">Послуги</a></li>
+            <li><a href="#about" data-lang-uk="Про мене" data-lang-en="About">Про мене</a></li>
+            <li><a href="#contact" data-lang-uk="Контакти" data-lang-en="Contact">Контакти</a></li>
+        </ul>
+        <button class="lang-btn" id="langToggle" aria-label="Switch language">🇬🇧 EN</button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">☰</button>
+    </nav>
+
+    <!-- ═══════════════ 1. HERO ═══════════════ -->
+    <section class="hero reveal" id="hero">
+        <div class="hero-content">
+            <span class="badge" data-lang-uk="Анна Коваль | Естетика та здоров'я ваших нігтів"
+                  data-lang-en="Anna Koval | Aesthetics & Health of Your Nails">
+                Анна Коваль | Естетика та здоров'я ваших нігтів
+            </span>
+            <h1 data-lang-uk="Манікюр, який тримається тижнями та збирає компліменти"
+                data-lang-en="A Manicure That Lasts for Weeks and Collects Compliments">
+                Манікюр, який тримається тижнями та збирає компліменти
+            </h1>
+            <p data-lang-uk="Бездоганна форма, стійке преміум-покриття та 100% безпека. Створюю витончений дизайн, що підкреслює твою індивідуальність та додає впевненості щодня."
+               data-lang-en="Flawless shaping, long-lasting premium coating, and 100% safety. Creating elegant designs that emphasize your individuality and boost your daily confidence.">
+                Бездоганна форма, стійке преміум-покриття та 100% безпека. Створюю витончений дизайн, що підкреслює твою індивідуальність та додає впевненості щодня.
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn-primary" data-lang-uk="Забронювати зручний час" data-lang-en="Book Your Appointment">Забронювати зручний час</a>
+                <a href="#services" class="btn-outline" data-lang-uk="Дивитись прайс" data-lang-en="View Price List">Дивитись прайс</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- ФОТО 1: Головне фото (кругле) 600x600px   -->
+            <!-- Заміни src="" на шлях до твого фото       -->
+            <!-- ═══════════════════════════════════════════ -->
+            <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&h=600&fit=crop&crop=face"
+                 alt="Анна Коваль - майстер манікюру"
+                 loading="eager">
+        </div>
+    </section>
+
+    <!-- ═══════════════ 2. ПЕРЕВАГИ ═══════════════ -->
+    <section id="benefits">
+        <h2 class="section-title reveal" data-lang-uk="Чому клієнти обирають мій кабінет?"
+            data-lang-en="Why Do Clients Choose My Studio?">
+            Чому клієнти обирають мій кабінет?
+        </h2>
+        <p class="section-subtitle reveal reveal-delay-1" data-lang-uk="Кожна деталь продумана для твого комфорту та безпеки"
+           data-lang-en="Every detail is designed for your comfort and safety">
+            Кожна деталь продумана для твого комфорту та безпеки
+        </p>
+        <div class="benefits-grid">
+            <div class="benefit-card reveal reveal-delay-1">
+                <span class="icon">🛡️</span>
+                <h3 data-lang-uk="Абсолютна безпека" data-lang-en="Absolute Safety">Абсолютна безпека</h3>
+                <p data-lang-uk="100% стерильність. Інструменти проходять 3-етапну медичну дезінфекцію та стерилізацію у сухожарі. Крафт-пакет відкривається виключно при вас."
+                   data-lang-en="100% sterile. Instruments undergo 3-stage medical-grade disinfection and dry-heat sterilization. The sealed kraft bag is opened strictly in front of you.">
+                    100% стерильність. Інструменти проходять 3-етапну медичну дезінфекцію та стерилізацію у сухожарі. Крафт-пакет відкривається виключно при вас.
+                </p>
+            </div>
+            <div class="benefit-card reveal reveal-delay-2">
+                <span class="icon">💎</span>
+                <h3 data-lang-uk="Преміальні матеріали" data-lang-en="Premium Materials">Преміальні матеріали</h3>
+                <p data-lang-uk="Працюю тільки на гіпоалергенних матеріалах світових брендів. Покриття не відшаровується, не тьмяніє і захищає нігтьову пластину."
+                   data-lang-en="Working exclusively with top-tier hypoallergenic brands. The coating won't peel or fade, and safely protects your nail plate.">
+                    Працюю тільки на гіпоалергенних матеріалах світових брендів. Покриття не відшаровується, не тьмяніє і захищає нігтьову пластину.
+                </p>
+            </div>
+            <div class="benefit-card reveal reveal-delay-3">
+                <span class="icon">⏳</span>
+                <h3 data-lang-uk="Гарантія стійкості" data-lang-en="Guaranteed Durability">Гарантія стійкості</h3>
+                <p data-lang-uk="Забудьте про сколи та тріщини. Мій манікюр стабільно тримається від 3-х тижнів, зберігаючи первинний вигляд."
+                   data-lang-en="Forget about chips and cracks. My manicures easily last for 3+ weeks while maintaining a flawless look.">
+                    Забудьте про сколи та тріщини. Мій манікюр стабільно тримається від 3-х тижнів, зберігаючи первинний вигляд.
+                </p>
+            </div>
+            <div class="benefit-card reveal reveal-delay-4">
+                <span class="icon">☕</span>
+                <h3 data-lang-uk="Турбота про комфорт" data-lang-en="Care for Comfort">Турбота про комфорт</h3>
+                <p data-lang-uk="Час процедури пролетить непомітно. На вас чекають затишна атмосфера, смачна кава, улюблений фільм та повне розслаблення."
+                   data-lang-en="Your appointment will fly by. Enjoy a cozy atmosphere, delicious coffee, your favorite show, and pure relaxation.">
+                    Час процедури пролетить непомітно. На вас чекають затишна атмосфера, смачна кава, улюблений фільм та повне розслаблення.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ 3. ПОСЛУГИ ═══════════════ -->
+    <section id="services">
+        <h2 class="section-title reveal" data-lang-uk="Послуги, які підкреслять твою красу"
+            data-lang-en="Services Designed to Highlight Your Beauty">
+            Послуги, які підкреслять твою красу
+        </h2>
+        <p class="section-subtitle reveal reveal-delay-1" data-lang-uk="Обери те, що потрібно саме тобі"
+           data-lang-en="Choose exactly what you need">
+            Обери те, що потрібно саме тобі
+        </p>
+        <div class="services-grid">
+            <!-- Послуга 1 -->
+            <div class="service-card reveal reveal-delay-1">
+                <div class="service-img">
+                    <!-- ═══════════════════════════════════════════ -->
+                    <!-- ФОТО 2: Естетичний манікюр 400x250px       -->
+                    <!-- ═══════════════════════════════════════════ -->
+                    <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?w=400&h=250&fit=crop"
+                         alt="Естетичний манікюр" loading="lazy">
+                </div>
+                <div class="service-info">
+                    <h3 data-lang-uk="Естетичний манікюр (Комбі/Апарат)"
+                        data-lang-en="Aesthetic Manicure (Combined/Hardware)">
+                        Естетичний манікюр (Комбі/Апарат)
+                    </h3>
+                    <p data-lang-uk="Ідеальне очищення, делікатна обробка кутикули та надання правильної архітектурної форми нігтям."
+                       data-lang-en="Flawless cleaning, gentle cuticle care, and shaping for correct nail architecture.">
+                        Ідеальне очищення, делікатна обробка кутикули та надання правильної архітектурної форми нігтям.
+                    </p>
+                </div>
+            </div>
+            <!-- Послуга 2 -->
+            <div class="service-card reveal reveal-delay-2">
+                <div class="service-img">
+                    <!-- ═══════════════════════════════════════════ -->
+                    <!-- ФОТО 3: Однотонне покриття 400x250px       -->
+                    <!-- ═══════════════════════════════════════════ -->
+                    <img src="https://images.unsplash.com/photo-1587574671827-f0e6c3a0c3e6?w=400&h=250&fit=crop"
+                         alt="Манікюр + покриття" loading="lazy">
+                </div>
+                <div class="service-info">
+                    <h3 data-lang-uk="Комплекс: Манікюр + Однотонне покриття"
+                        data-lang-en="Full Package: Manicure + Solid Coating">
+                        Комплекс: Манікюр + Однотонне покриття
+                    </h3>
+                    <p data-lang-uk="Укріплення нігтьової пластини, вирівнювання базою та нанесення стійкого кольорового покриття."
+                       data-lang-en="Nail plate strengthening, base leveling, and applying a long-lasting, vibrant color.">
+                        Укріплення нігтьової пластини, вирівнювання базою та нанесення стійкого кольорового покриття.
+                    </p>
+                </div>
+            </div>
+            <!-- Послуга 3 -->
+            <div class="service-card reveal reveal-delay-3">
+                <div class="service-img">
+                    <!-- ═══════════════════════════════════════════ -->
+                    <!-- ФОТО 4: Нарощування нігтів 400x250px       -->
+                    <!-- ═══════════════════════════════════════════ -->
+                    <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=400&h=250&fit=crop"
+                         alt="Нарощування нігтів" loading="lazy">
+                </div>
+                <div class="service-info">
+                    <h3 data-lang-uk="Моделювання та нарощування"
+                        data-lang-en="Nail Modeling & Extensions">
+                        Моделювання та нарощування
+                    </h3>
+                    <p data-lang-uk="Створення бажаної довжини та форми (гель/полігель). Виправлення клюючих нігтів та ремонт будь-якої складності."
+                       data-lang-en="Creating your desired length and shape using gel/polygel. Correction and repairs of any complexity.">
+                        Створення бажаної довжини та форми (гель/полігель). Виправлення клюючих нігтів та ремонт будь-якої складності.
+                    </p>
+                </div>
+            </div>
+            <!-- Послуга 4 -->
+            <div class="service-card reveal reveal-delay-4">
+                <div class="service-img">
+                    <!-- ═══════════════════════════════════════════ -->
+                    <!-- ФОТО 5: SPA-ритуал для рук 400x250px       -->
+                    <!-- ═══════════════════════════════════════════ -->
+                    <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&h=250&fit=crop"
+                         alt="SPA для рук" loading="lazy">
+                </div>
+                <div class="service-info">
+                    <h3 data-lang-uk="SPA-ритуал для рук"
+                        data-lang-en="SPA Hand Ritual">
+                        SPA-ритуал для рук
+                    </h3>
+                    <p data-lang-uk="Глибоке відновлення шкіри: делікатний скраб, парафінотерапія та розслабляючий масаж з доглядовою олійкою."
+                       data-lang-en="Deep skin restoration: gentle scrub, paraffin therapy, and a relaxing massage with nourishing oils.">
+                        Глибоке відновлення шкіри: делікатний скраб, парафінотерапія та розслабляючий масаж з доглядовою олійкою.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ 4. ПРО МАЙСТРА ═══════════════ -->
+    <section id="about">
+        <h2 class="section-title reveal" data-lang-uk="Твій особистий nail-експерт"
+            data-lang-en="Your Personal Nail Expert">
+            Твій особистий nail-експерт
+        </h2>
+        <div class="about-section">
+            <div class="about-image reveal reveal-delay-1">
+                <!-- ═══════════════════════════════════════════ -->
+                <!-- ФОТО 6: Портрет Анни 400x500px             -->
+                <!-- ═══════════════════════════════════════════ -->
+                <img src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&h=500&fit=crop&crop=face"
+                     alt="Анна - nail-експерт" loading="lazy">
+            </div>
+            <div class="about-text reveal reveal-delay-2">
+                <p data-lang-uk="Привіт! Мене звати Анна, і я закохана у бездоганний манікюр. Уже понад 5 років я допомагаю жінкам почуватися впевненіше, створюючи для них ідеальні нігті."
+                   data-lang-en="Hello! My name is Anna, and I am in love with flawless manicures. For over 5 years, I have been helping women feel more confident by creating perfect nails for them.">
+                    Привіт! Мене звати Анна, і я закохана у бездоганний манікюр. Уже понад 5 років я допомагаю жінкам почуватися впевненіше, створюючи для них ідеальні нігті.
+                </p>
+                <p data-lang-uk="Моя мета — не просто зробити покриття, а зберегти здоров'я ваших рук та подарувати естетичне задоволення. Я постійно навчаюсь, відстежую світові тренди та знаю, як підібрати догляд та форму саме під твої пальчики."
+                   data-lang-en="My goal is not just to apply a coating, but to ensure the health of your hands and deliver pure aesthetic pleasure. I constantly upgrade my skills, follow global trends, and know exactly how to choose the right care and shape for your fingers.">
+                    Моя мета — не просто зробити покриття, а зберегти здоров'я ваших рук та подарувати естетичне задоволення. Я постійно навчаюсь, відстежую світові тренди та знаю, як підібрати догляд та форму саме під твої пальчики.
+                </p>
+                <p data-lang-uk="Довіряючи мені, ти обираєш якість без компромісів."
+                   data-lang-en="By choosing me, you choose quality without compromise.">
+                    Довіряючи мені, ти обираєш якість без компромісів.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ 5. КОНТАКТИ ═══════════════ -->
+    <section id="contact">
+        <h2 class="section-title reveal" data-lang-uk="Готова до бездоганного манікюру?"
+            data-lang-en="Ready for a Flawless Manicure?">
+            Готова до бездоганного манікюру?
+        </h2>
+        <p class="section-subtitle reveal reveal-delay-1" data-lang-uk="Залиш заявку прямо зараз, і я підберу для тебе найближче зручне віконце."
+           data-lang-en="Fill out the form right now, and I will find the best and nearest time slot for you.">
+            Залиш заявку прямо зараз, і я підберу для тебе найближче зручне віконце.
+        </p>
+        <div class="contact-wrapper">
+            <div class="contact-info reveal reveal-delay-1">
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <span data-lang-uk="вул. Хрещатик, 12, Київ (Затишна студія 'Glow')"
+                          data-lang-en="12 Khreshchatyk St, Kyiv (Cozy Studio 'Glow')">
+                        вул. Хрещатик, 12, Київ (Затишна студія "Glow")
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📞</span>
+                    <span>+38 (095) xxx-xx-xx (Telegram / WhatsApp)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📱</span>
+                    <span>Instagram: @anna_nail_art</span>
+                </div>
+            </div>
+            <div class="contact-form reveal reveal-delay-2" id="bookingForm">
+                <input type="text" id="clientName" data-lang-uk-placeholder="Твоє ім'я"
+                       data-lang-en-placeholder="Your Name" placeholder="Твоє ім'я" required>
+                <input type="tel" id="clientPhone" data-lang-uk-placeholder="Номер телефону"
+                       data-lang-en-placeholder="Phone Number" placeholder="Номер телефону" required>
+                <button type="submit" class="btn-primary" id="submitForm"
+                        data-lang-uk="Надіслати заявку та забронювати візит"
+                        data-lang-en="Book My Appointment">
+                    Надіслати заявку та забронювати візит
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer>
+        <p data-lang-uk="© 2026 Анна Коваль. Твоя краса та безпека у надійних руках."
+           data-lang-en="© 2026 Anna Koval. Your beauty and safety are in reliable hands.">
+            © 2026 Анна Коваль. Твоя краса та безпека у надійних руках.
+        </p>
+    </footer>
+
+    <!-- Toast сповіщення -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════
+        //  ПЕРЕМИКАННЯ МОВ (UA / EN)
+        // ═══════════════════════════════════════════════════════
+        let currentLang = 'uk';
+        const langToggle = document.getElementById('langToggle');
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // Оновлюємо всі елементи з data-lang-uk / data-lang-en
+            document.querySelectorAll('[data-lang-uk]').forEach(el => {
+                if (el.tagName === 'INPUT') return; // інпути окремо
+                const text = lang === 'uk' ? el.getAttribute('data-lang-uk') : el.getAttribute('data-lang-en');
+                if (text !== null) el.textContent = text;
+            });
+
+            // Оновлюємо плейсхолдери інпутів
+            document.querySelectorAll('[data-lang-uk-placeholder]').forEach(input => {
+                const placeholder = lang === 'uk'
+                    ? input.getAttribute('data-lang-uk-placeholder')
+                    : input.getAttribute('data-lang-en-placeholder');
+                if (placeholder !== null) input.placeholder = placeholder;
+            });
+
+            // Оновлюємо кнопку
+            if (lang === 'uk') {
+                langToggle.textContent = '🇬🇧 EN';
+            } else {
+                langToggle.textContent = '🇺🇦 UA';
+            }
+
+            // Зберігаємо вибір
+            localStorage.setItem('lang', lang);
+        }
+
+        langToggle.addEventListener('click', () => {
+            const newLang = currentLang === 'uk' ? 'en' : 'uk';
+            switchLanguage(newLang);
+        });
+
+        // Завантажуємо збережену мову
+        const savedLang = localStorage.getItem('lang');
+        if (savedLang && (savedLang === 'uk' || savedLang === 'en')) {
+            switchLanguage(savedLang);
+        }
+
+        // ═══════════════════════════════════════════════════════
+        //  АНІМАЦІЯ ПОЯВИ ПРИ СКРОЛІ (Intersection Observer)
+        // ═══════════════════════════════════════════════════════
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        revealElements.forEach(el => observer.observe(el));
+
+        // ═══════════════════════════════════════════════════════
+        //  ФОРМА ЗВОРОТНЬОГО ЗВ'ЯЗКУ — ЯК ПРАЦЮЄ
+        // ═══════════════════════════════════════════════════════
+        /*
+         * Натискаючи кнопку "Надіслати заявку":
+         * 1. Скрипт зчитує ім'я та телефон із полів.
+         * 2. Валідує, що обидва поля заповнені.
+         * 3. Показує Toast-сповіщення про успіх.
+         * 4. У реальному проєкті тут має бути fetch-запит на сервер
+         *    (наприклад, на ваш PHP-обробник, або сервіс на кшталт
+         *     Formspree / Netlify Forms / Telegram Bot API).
+         *    Я залишив заглушку з коментарем, куди вставити запит.
+         * 5. Поля очищуються.
+         */
+        const submitBtn = document.getElementById('submitForm');
+        const nameInput = document.getElementById('clientName');
+        const phoneInput = document.getElementById('clientPhone');
+        const toast = document.getElementById('toast');
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            if (!name || !phone) {
+                const errMsg = currentLang === 'uk'
+                    ? '⚠️ Будь ласка, заповніть усі поля'
+                    : '⚠️ Please fill in all fields';
+                showToast(errMsg);
+                return;
+            }
+
+            // ─── ТУТ ВСТАВТЕ ВІДПРАВКУ НА СЕРВЕР ───
+            // Приклад через fetch:
+            // fetch('your-server-endpoint', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ name, phone, lang: currentLang })
+            // }).then(...)
+            console.log('📩 Заявка:', { name, phone, lang: currentLang });
+
+            // Показуємо успіх
+            const successMsg = currentLang === 'uk'
+                ? '✅ Дякую! Я зв\'яжусь із тобою найближчим часом 💅'
+                : '✅ Thank you! I\'ll contact you soon 💅';
+            showToast(successMsg);
+
+            // Очищаємо поля
+            nameInput.value = '';
+            phoneInput.value = '';
+        });
+
+        // ═══════════════════════════════════════════════════════
+        //  ТІНЬ НА НАВІГАЦІЇ ПРИ СКРОЛІ
+        // ═══════════════════════════════════════════════════════
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ═══════════════════════════════════════════════════════
+        //  МОБІЛЬНЕ МЕНЮ
+        // ═══════════════════════════════════════════════════════
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+
+        // Закривати меню при кліку на посилання
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // ═══════════════════════════════════════════════════════
+        //  АКТИВНИЙ ПУНКТ МЕНЮ ПРИ СКРОЛІ
+        // ═══════════════════════════════════════════════════════
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.querySelectorAll('a').forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
